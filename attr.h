@@ -3,12 +3,13 @@
 
 #include <any>
 
-class tree;
-
-// An attribute instance with value (maybe empty) and a reference to tree node definition
 class attribute_value {
     public:
-        attribute_value(tree* ref_to_def) : _def(ref_to_def) {}
+
+        attribute_value() {}
+
+        template<typename T>
+        attribute_value(T v) : _value(v) {}
 
         template<typename T>
         T get_value() { std::any_cast<T>(_value); }
@@ -19,8 +20,10 @@ class attribute_value {
         bool evaluated() { return _value.has_value(); }
 
     private:
-        tree* _def;
         std::any _value;
 };
+
+// Composite values (collections)
+using collection = std::list<attribute_value>;
 
 #endif

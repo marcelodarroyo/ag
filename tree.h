@@ -24,8 +24,12 @@ class tree {
         void add_child(tree* child);
 
         void def_attribute(std::string name);
-        std::any get_attribute(std::string name) const { return _attrs.at(name); }
-        void     set_attribute(std::string name, std::any value) { _attrs[name] = value; }
+        attribute_value get_value(std::string name) const { return _attrs.at(name); }
+        attribute_value& get_ref(std::string name) { return _attrs.at(name); }
+        void set_value(std::string name, attribute_value value) { _attrs[name] = value; }
+
+        void def_collection(std::string name) { _attrs[name] = collection(); }
+        void add_to_collection(std::string name, attribute_value v);
 
         ~tree();
     private:
@@ -35,6 +39,7 @@ class tree {
         tree*                                   _right;
         std::vector<tree*>                      _childs;
         std::map<std::string, attribute_value>  _attrs;
+
 };
 
 //=============================================================================

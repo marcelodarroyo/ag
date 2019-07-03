@@ -3,14 +3,23 @@
 ag::ag(std::string name)
     : _ag(name)
 {
-    _ag.add_child(t("grammar_rules"), t("equations"));
+    _ag.add_child(t(ag_rules), t(ag_eqtns));
+
+    // define collections
+    _ag.def_collection(ag_rules);
+    _ag.def_collection(ag_attrs);
+    _ag.def_collection(ag_eqtns);
 }
 
-void ag::def_attribute(std::string id, char kind, char type, char ref_or_coll)
+void def_grammar_rule(tree* rule); {
+    _ag.child(0)->add_child(rule);
+    std::pair<std::string, tree*> v(rule.label(), rule);
+    _ag.add_to_collection(ag_rules, attribute_value(v));
+}
+
+void ag::def_attribute(std::string id, char kind, char type, char dep_type)
 {
-    std::string type = std::string() + kind + type + ref_or_coll;
-    _ag.def_attribute(id);
-    _ag.set_value(type);
+    _ag.set_value(ag_attrs, id, std::string() + kind + type + dep_type);
 }
 
 

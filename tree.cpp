@@ -23,7 +23,13 @@ void tree::add_child(tree* child)
 
 void tree::def_attribute(std::string name)
 {
-    _attrs[name] = std::any();
+    _attrs[name] = attribute_value();
+}
+
+void tree::add_to_collection(std::string name, attribute_value v)
+{
+    attribute_value &c = _ag.get_ref(name);
+    c.push_back(v);
 }
 
 tree::~tree() {

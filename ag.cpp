@@ -1,20 +1,34 @@
 #include "ag.h"
 
+static const char* ag_rules = "(ag_rules)";
+static const char* ag_attrs = "(ag_attrs)";
+static const char* ag_eqtns = "(ag_eqtns)";
+
+using rules_collection = std::map<std::string, tree*>;
+using attrs_collection = std::map<std::string, std::string>;
+using eqtns_collection = std::map<std::string, tree*>;
+
 ag::ag(std::string name)
     : _ag(name)
 {
-    _ag.add_child(t(ag_rules), t(ag_eqtns));
+    _ag.add_child(mk_tree(ag_rules));
+    _ag.add_child(mk_tree(ag_attrs));
 
-    // define collections
-    _ag.def_collection(ag_rules);
-    _ag.def_collection(ag_attrs);
-    _ag.def_collection(ag_eqtns);
+    // define collection attributes
+    _ag.def_attribute(ag_rules);
+    _ag.set_attr_value(ag_rules, rules_collection());
+
+    _ag.def_attribute(ag_attrs);
+    _ag.set_attr_value(ag_attrs, attrs_collection());
+
+    _ag.def_attribute(ag_eqtns);
+    _ag.set_attr_value(ag_eqtns, eqtns_collection());
 }
 
 void def_grammar_rule(tree* rule); {
     _ag.child(0)->add_child(rule);
-    std::pair<std::string, tree*> v(rule.label(), rule);
-    _ag.add_to_collection(ag_rules, attribute_value(v));
+    rules_collection *c = _ag.get_attr(ag_rules).get_ref<rules_collection>();
+    (*c)[rule.label()] = rule;
 }
 
 void ag::def_attribute(std::string id, char kind, char type, char dep_type)

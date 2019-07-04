@@ -6,13 +6,14 @@
 class attribute_value {
     public:
 
-        attribute_value() {}
-
         template<typename T>
         attribute_value(T v) : _value(v) {}
 
         template<typename T>
         T get_value() { std::any_cast<T>(_value); }
+
+        template<typename T>
+        T* get_ref() { std::any_cast<T>(&_value); }
 
         template<typename T>
         T set_value(const T & v) { _value = v; }
@@ -22,8 +23,5 @@ class attribute_value {
     private:
         std::any _value;
 };
-
-// Composite values (collections)
-using collection = std::list<attribute_value>;
 
 #endif

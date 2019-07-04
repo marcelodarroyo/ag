@@ -1,3 +1,6 @@
+tests_cpp: tests.cpp
+	g++ -std=c++17 -o tests_cpp tests.cpp
+
 all: ag_tests
 
 ag_tests: ag.o tree.o ag_tests.cpp
